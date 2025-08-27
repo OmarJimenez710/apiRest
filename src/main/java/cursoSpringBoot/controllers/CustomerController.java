@@ -1,10 +1,12 @@
 package cursoSpringBoot.controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.HttpStatus;
@@ -54,8 +56,23 @@ public class CustomerController {
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         customerList.add(customer);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Usuario creado correctamente con id: " + customer.getId());
+        // return ResponseEntity.status(HttpStatus.CREATED)
+        // .body("Usuario creado correctamente con id: " + customer.getId());
+
+        // construimos la url del nuevo recurso
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(customer.getId())
+                .toUri();
+
+        // return ResponseEntity.created(location).build(); Da una respuesta sin
+        // contenido, pero en los headers se muestra la URI
+
+        // BUENA PRACTICA EN EL DIEÑO DE APLICACIONES RESTFUL
+        // mandar la URI del recurso creado en cabezara y el recurso creado en la
+        // respuesta
+        return ResponseEntity.created(location).body(customer);
     }
 
     // @RequestMapping(method = RequestMethod.PUT)
