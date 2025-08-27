@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,33 +30,37 @@ public class CustomerController {
 
     // @RequestMapping(method = RequestMethod.GET)
     @GetMapping
-    public List<Customer> getCustomerList() {
-        return customerList;
+    public ResponseEntity<List<Customer>> getCustomerList() {
+        // return customerList;
+        return ResponseEntity.ok(customerList);
     }
 
     // @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @GetMapping("/{id}")
-    public Customer getCustomer(@PathVariable int id) {
+    public ResponseEntity<?> getCustomer(@PathVariable int id) {
         for (Customer c : customerList) {
             if (c.getId() == id) {
-                return c;
+                // return c;
+                return ResponseEntity.ok(c);
             }
         }
 
-        return null; // practica no recomendada
+        // return null; // practica no recomendada
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado con el id: " + id);
     }
 
     // @RequestMapping(method = RequestMethod.POST)
     @PostMapping
-    public List<Customer> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         customerList.add(customer);
 
-        return customerList;
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Usuario creado correctamente con id: " + customer.getId());
     }
 
     // @RequestMapping(method = RequestMethod.PUT)
     @PutMapping
-    public Customer updateCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         for (Customer c : customerList) {
             if (c.getId() == customer.getId()) {
                 c.setId(customer.getId());
@@ -62,21 +68,23 @@ public class CustomerController {
                 c.setUserName((customer.getUserName()));
                 c.setPassword(customer.getPassword());
 
-                return c;
+                return ResponseEntity.ok("Cliente modificado con éxito con id: " + customer.getId());
             }
         }
-        return null; // practica no recomendada
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Cliente con id " + customer.getId() + " no encontrado");
     }
 
     // @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @DeleteMapping("/{id}")
-    public List<Customer> deleteCustomer(@PathVariable int id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
         for (Customer c : customerList) {
             if (c.getId() == id) {
                 customerList.remove(c);
+                return ResponseEntity.ok("Cliente eliminado correctamente");
             }
         }
 
-        return customerList;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El cliente con id " + id + " no encontrado");
     }
 }
