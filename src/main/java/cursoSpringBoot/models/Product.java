@@ -19,6 +19,9 @@ public class Product {
         this.stock = stock;
     }
 
+    public Product() { // NECESARIO PARA LA BIBLIOTECA JACKSON
+    }
+
     public Integer getId() {
         return id;
     }
