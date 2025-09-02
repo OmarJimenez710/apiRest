@@ -1,5 +1,6 @@
 package cursoSpringBoot.services;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +10,10 @@ import cursoSpringBoot.models.Product;
 import java.io.IOException;
 import java.util.List;
 
-@Primary
+//@Primary se quita porque se implemento Qualifier 
+//@Service("jsonResourceService") --> solo cuando se ocupa @Qualifier
 @Service
+@ConditionalOnProperty(name = "service.products", havingValue = "json")
 public class ProductServiceJSONImpl implements ProductService {
 
     @Override

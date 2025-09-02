@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +20,10 @@ import cursoSpringBoot.models.Product;
  * lo que teniamos en la parte del controlador 
  * ProductService productService = new ProductServiceImpl();
  */
+//@Service("listResourceService") --> solo cuando se ocupa @Qualifier
+@Lazy
 @Service
+@ConditionalOnProperty(name = "service.products", havingValue = "list")
 public class ProductServiceImpl implements ProductService {
     // donde debe de estar toda la lógica
 
