@@ -9,4 +9,6 @@ public class CursoConSpringBootApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CursoConSpringBootApplication.class, args);
 	}
+
+	// clase 30 terminada --> ver que sigue
 }
